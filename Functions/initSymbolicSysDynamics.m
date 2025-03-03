@@ -18,7 +18,7 @@ function symbolicDynamics = initSymbolicSysDynamics(phi, g, m, J_t,d, S, l,Sm,C_
 % C_N: Normal aerodynamic force coefficient [-]
 % V: 2-norm of the velocity [m/s]
 % C_l: Rolling aerodynamic moment coefficient [-]
-% C_m: Pitching aerodynamic moment coefficient [-]
+% C_m: Pitching aerodynamic moment coefficient [-]$
 % C_n: Yawing aerodynamic moment coefficent [-]
     syms theta Psi v w u p q r mu1 mu2 T
     V = norm([v w u]);
