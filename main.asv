@@ -3,30 +3,43 @@ close all
 clc
 addpath Functions
 
-%% 
+%% Create Linear System
 
 % Function defines important variables, inspect the function
 % defineConstants for the definition of all variables
-[phi, g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta,rho] = defineConstants;
+[g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta,rho] = defineConstants;
 
-variables = [phi, g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta];
+variables = [g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta];
 
 % Initialize the symbolic dynamics, such that we can take the Jacobian
 % later
-symbolicDynamics = initSymbolicSysDynamics(phi, g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta,rho);
+symbolicDynamics = initSymbolicSysDynamics(g, m, J_t, l);
 
-syms theta Psi v w u p q r mu1 mu2 T
+syms theta Psi u v w q r mu1 mu2 T
 
-
+% Define which of our symbolic variables are states, inputs and
+% disturbances
 symbolicDisturbances = [];
-symbolicStates = [theta Psi v w u p q r];
+symbolicStates = [u v w q r theta Psi];
 symbolicInputs = [mu1 mu2 T];
 
-stateOperatingPoints = [0 1 2 3 4 5 6 7];
+% Define the operatings points around which we linearize the system, take
+% everything to be zero, except for you thrust which is m*g
+stateOperatingPoints = [0 0 0 0 0 0 0];
 
-inputOperatingPoints = [3 4 5];
+inputOperatingPoints = [0 0 m*g];
 
 disturbanceOperatingPoints = [];
 
+% Linearize the dynamics around the operating points. Returns an LTI object
+% with A,B,G matrices as subobjects
+[LTI, symbolic] = linearizeDynamics(symbolicDynamics,symbolicStates,symbolicInputs,symbolicDisturbances,stateOperatingPoints,inputOperatingPoints,disturbanceOperatingPoints);
 
-LTI = linearizeDynamics(symbolicDynamics,symbolicStates,symbolicInputs,symbolicDisturbances,stateOperatingPoints,inputOperatingPoints,disturbanceOperatingPoints);
+%% Simulate the System (with LQR Controller)
+
+LTI.C = eyes(size())
+
+t = 0:0.01:100;
+
+u = zeros(leng(t),1);
+

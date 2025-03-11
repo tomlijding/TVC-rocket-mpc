@@ -1,4 +1,4 @@
-function [phi, g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta, rho] = defineConstants
+function [g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta, rho] = defineConstants
 %DEFINECONSTANTS Summary of this function goes here
 % g: Gravitational constant [m s^-2]
 % qbar: Dynamic pressure [Pascals]
@@ -6,10 +6,10 @@ function [phi, g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C
 % J: Inertia matrix [kg m^2]
 % d: Diameter of the fuselage [m]
 % S: Cross-sectional area of the fuselage [m^2]
-% l: length from the center of mass to the gimbal [m]
-% x_cp: The distance to the centre of pressure, measured from the centre of
-% mass (assumed to be constant) [m]
-% x_cm: The distance from the centre of mass to the gimbal [m]
+% l: length from the center of mass to the gimbal = Total length of
+% rocket - distrance from tip to centre of mass [m]
+% x_cp: The distance to the centre of pressure, measured from the tip of the rocket (assumed to be constant) [m]
+% x_cm: The distance from the centre of mass to the tip [m]
 % Sm: Stability margin, expressed as (x_cp - x_cm)/d
 % rho: Air density [kg m^-3]
 % C_A: Axial aerodynamic force coefficient [-]
@@ -21,13 +21,12 @@ function [phi, g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C
 % C_n: Yawing aerodynamic moment coefficent [-]
 % x_cp : Distance from tip to centre of pressure [m];
 % x_cm : Distance from tip to centre of mass [m];
-phi = 0;
 g = 9.81;
 m = 82.9;
 J_t = 88;
 d = 0.24;
 S = 0.04524;
-l = 3.57;
+l = 2.77;
 x_cp = 0.75;
 x_cm = 0.8;
 Sm = (x_cp- x_cm)/d;
