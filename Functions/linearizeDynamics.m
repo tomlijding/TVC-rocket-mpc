@@ -1,4 +1,4 @@
-function LTI = linearizeDynamics(symbolicDynamics,symbolicStates,symbolicInputs,symbolicDisturbances,stateOperatingPoints,inputOperatingPoints,disturbanceOperatingPoints)
+function [LTI, symbolic] = linearizeDynamics(symbolicDynamics,symbolicStates,symbolicInputs,symbolicDisturbances,stateOperatingPoints,inputOperatingPoints,disturbanceOperatingPoints)
 %linearizeDynamics Linearize the dynamics of the vector symbolicDynamics
 %w.r.t. the vector symbolic states, inputs and disturbances at the
 %specified operating points
@@ -8,11 +8,11 @@ symbolicVector = [symbolicStates'; symbolicInputs'; symbolicDisturbances'];
 
 operatingPoints = [stateOperatingPoints';inputOperatingPoints';disturbanceOperatingPoints'];
 
-symbolicA = jacobian(symbolicDynamics,symbolicStates);
-symbolicB = jacobian(symbolicDynamics,symbolicInputs);
-symbolicG = jacobian(symbolicDynamics,symbolicDisturbances);
+symbolic.A = jacobian(symbolicDynamics,symbolicStates);
+symbolic.B = jacobian(symbolicDynamics,symbolicInputs);
+symbolic.G = jacobian(symbolicDynamics,symbolicDisturbances);
 
-LTI.A = double(subs(symbolicA,symbolicVector',operatingPoints'));
-LTI.B = double(subs(symbolicB,symbolicVector',operatingPoints'));
-LTI.G = double(subs(symbolicG,symbolicVector',operatingPoints'));
+LTI.A = double(subs(symbolic.A,symbolicVector',operatingPoints'));
+LTI.B = double(subs(symbolic.B,symbolicVector',operatingPoints'));
+LTI.G = double(subs(symbolic.G,symbolicVector',operatingPoints'));
 end
