@@ -1,15 +1,10 @@
-clear all
-close all
-clc
-addpath Functions
-
-%% Create Linear System
+function [LTId] = makeDLinSysNAero(samplingTime)
+%MAKEDLINSYSNAERO Creates the linear dynamics for the rocket system given
+%that it is floating
 
 % Function defines important variables, inspect the function
 % defineConstants for the definition of all variables
-[g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta,rho] = defineConstants;
-
-variables = [g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta];
+[g, m, J_t,~, ~, l,~,~, ~,~, ~, ~, ~, ~,~] = defineConstants;
 
 % Initialize the symbolic dynamics, such that we can take the Jacobian
 % later
@@ -33,13 +28,10 @@ disturbanceOperatingPoints = [];
 
 % Linearize the dynamics around the operating points. Returns an LTI object
 % with A,B,G matrices as subobjects
-[LTI, symbolic] = linearizeDynamics(symbolicDynamics,symbolicStates,symbolicInputs,symbolicDisturbances,stateOperatingPoints,inputOperatingPoints,disturbanceOperatingPoints);
+[LTI, ~] = linearizeDynamics(symbolicDynamics,symbolicStates,symbolicInputs,symbolicDisturbances,stateOperatingPoints,inputOperatingPoints,disturbanceOperatingPoints);
 
-%% Simulate the System (with LQR Controller)
+LTI = ss(LTI.A,LTI.B,LTI.C,0);
 
-LTI.C = eyes(size())
-
-t = 0:0.01:100;
-
-u = zeros(leng(t),1);
+LTId = c2d(LTI,samplingTime,'zoh');
+end
 

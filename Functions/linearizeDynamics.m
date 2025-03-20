@@ -10,9 +10,10 @@ operatingPoints = [stateOperatingPoints';inputOperatingPoints';disturbanceOperat
 
 symbolic.A = jacobian(symbolicDynamics,symbolicStates);
 symbolic.B = jacobian(symbolicDynamics,symbolicInputs);
-symbolic.G = jacobian(symbolicDynamics,symbolicDisturbances);
+symbolic.Bd = jacobian(symbolicDynamics,symbolicDisturbances);
 
 LTI.A = double(subs(symbolic.A,symbolicVector',operatingPoints'));
 LTI.B = double(subs(symbolic.B,symbolicVector',operatingPoints'));
-LTI.G = double(subs(symbolic.G,symbolicVector',operatingPoints'));
+LTI.C = eye(size(LTI.A,1));
+LTI.Bd = double(subs(symbolic.Bd,symbolicVector',operatingPoints'));
 end

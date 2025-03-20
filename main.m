@@ -10,8 +10,6 @@ addpath given
 % defineConstants for the definition of all variables
 [g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta,rho] = defineConstants;
 
-variables = [g, m, J_t,d, S, l,Sm,C_A, C_Y_beta,C_N_alpha, C_m_q, C_m_alpha, C_n_r, C_n_beta];
-
 % Initialize the symbolic dynamics, such that we can take the Jacobian
 % later
 symbolicDynamics = initSymbolicSysDynamics(g, m, J_t, l);
@@ -85,6 +83,7 @@ R = r*eye(dim.nu);
 K = -K;
 %% Find the terminal set and constraints
 
-N = 10;
+% Define the terminal set, in our case it is defined as x'Px = c where c =
+% 0.025
+c = 0.025;
 
-[Xn, V, Z] = findXn(LTID.A, LTID.B, K, N, xlb, xub, ulb, uub, 'lqr');

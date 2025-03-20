@@ -34,7 +34,9 @@ case 'lqr'
     % Use LQR-invariant set.
     Xf = struct();
     ApBK = A + B*K; % LQR evolution matrix.
+    input("Debugging: Begin finding terminal set?")
     [Xf.A, Xf.b] = calcOinf(ApBK, Acon, bcon);
+    print("Debugging, terminal set succesfully found")
     [~, Xf.A, Xf.b] = removeredundantcon(Xf.A, Xf.b);
 end
 

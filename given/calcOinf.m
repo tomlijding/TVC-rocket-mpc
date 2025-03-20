@@ -17,7 +17,7 @@ AOinf = zeros(0, Nx);
 bOinf = zeros(0, 1);
 tstar = inf();
 
-for t = 0:100
+for t = 0:1000
     % Add constraints for new time point.
     AOinf = [AOinf; A*Ft];
     bOinf = [bOinf; b];
@@ -38,8 +38,10 @@ for t = 0:100
     % If everything was feasible, then we're done.
     if okay
         tstar = t;
+        print("Terminal set successfully found")
         break
     end
+    fprintf("Time is: %g\n",t);
 end
 
 end%function
