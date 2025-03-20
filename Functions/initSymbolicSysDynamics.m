@@ -20,26 +20,32 @@ function symbolicDynamics = initSymbolicSysDynamics(g, m, J_t, l)
 % C_l: Rolling aerodynamic moment coefficient [-]
 % C_m: Pitching aerodynamic moment coefficient [-]$
 % C_n: Yawing aerodynamic moment coefficent [-]
-    syms theta Psi v w u q r mu1 mu2 T
+    syms theta Psi phi v w u p q r mu1 mu2 tau_r T
     
     % Calculate trigonometric functions
     sPsi = sin(Psi);
     stheta = sin(theta);
+    sphi = sin(phi);
     cPsi = cos(Psi);
     ctheta = cos(theta);
+    ttheta = tan(theta);
+    cphi = cos(phi);
     cmu1 = cos(mu1);
     cmu2 = cos(mu2);
     smu1 = sin(mu1);
     smu2 = sin(mu2);
 
     udot = -g * ctheta * cPsi + T/m * cmu1 * cmu2 - q * w + r * v;
-    vdot= -g*(-sPsi) - T/m*cmu1*smu2 - r * u;
-    wdot = -g*(stheta*cPsi) - T/m*smu1  + q*u;
+    vdot= -g*(sphi*stheta*cPsi-cphi*sPsi) - T/m*cmu1*smu2 - r * u + p*w;
+    wdot = -g*(cphi*stheta*cPsi+sphi*sPsi) - T/m*smu1  - p * v + q*u;
+
+    pdot = J_t^-1*tau_r;
     qdot = J_t^-1*(- T*smu1*l);
     rdot = J_t^-1*(T*cmu1*smu2*l);
-
-    thetadot = q;
-    Psidot = (r)/ctheta;
-    symbolicDynamics = [udot;vdot;wdot;qdot;rdot;thetadot;Psidot];
+    
+    phidot = p + (q*sphi +r*cphi)*ttheta;
+    thetadot = q*cphi - r * sphi;
+    Psidot = (q * sphi + r * cphi)/ctheta;
+    symbolicDynamics = [udot;vdot;wdot;pdot;qdot;rdot;phidot;thetadot;Psidot];
 end
 

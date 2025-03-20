@@ -10,19 +10,19 @@ function [LTId] = makeDLinSysNAero(samplingTime)
 % later
 symbolicDynamics = initSymbolicSysDynamics(g, m, J_t, l);
 
-syms theta Psi u v w q r mu1 mu2 T
+syms phi theta Psi u v w p q r mu1 mu2 tau_r T
 
 % Define which of our symbolic variables are states, inputs and
 % disturbances
 symbolicDisturbances = [];
-symbolicStates = [u v w q r theta Psi];
-symbolicInputs = [mu1 mu2 T];
+symbolicStates = [u v w p q r phi theta Psi];
+symbolicInputs = [mu1 mu2 tau_r T];
 
 % Define the operatings points around which we linearize the system, take
-% everything to be zero, except for you thrust which is m*g
-stateOperatingPoints = [0 0 0 0 0 0 0];
+% everything to be zero, except for your thrust which is m*g
+stateOperatingPoints = [0 0 0 0 0 0 0 0 0];
 
-inputOperatingPoints = [0 0 m*g];
+inputOperatingPoints = [0 0 0 m*g];
 
 disturbanceOperatingPoints = [];
 

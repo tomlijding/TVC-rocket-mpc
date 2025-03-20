@@ -18,13 +18,13 @@ C = LTId.C;
 
 % Dimensions
 
-dim.n = size(LTId.A,1);
+dim.nx = size(LTId.A,2);
 dim.N = 5;
-dim.u = size(LTId.B,2);
+dim.nu = size(LTId.B,2);
 
 % Cost function
-Q = 1*eye(dim.n);
-R = 1*eye(dim.u);
+Q = 10*eye(dim.nx);
+R = 0.1*eye(dim.nu);
 
 % LQR control law and discrete Riccati equation solution
 [K,P,~] = dlqr(A,B,Q,R);
@@ -41,17 +41,17 @@ g = 9.81;
 % ulb = [-0.15708; -0.15708; 0-m*g];
 % uub = [0.15708; 0.15708; 1052.279-m*g];
 
-xlb = [-inf(); -inf(); -inf();-inf(); -inf(); -0.261799; -0.261799];
-xub = [inf();inf(); inf();inf(); inf(); 0.261799; 0.261799];
-ulb = [-0.15708; -0.15708; 0-m*g];
-uub = [0.15708; 0.15708; 1052.279-m*g];
+xlb = [-inf(); -inf(); -inf();-inf(); -inf(); -inf(); -inf();-0.261799; -0.261799];
+xub = [inf();inf(); inf();inf(); inf();inf();inf(); 0.261799; 0.261799];
+ulb = [-0.15708; -0.15708;-1.66; 0-m*g];
+uub = [0.15708; 0.15708; 1.66; 1052.279-m*g];
 
 V_x = findVerticesOfEllipse(P,1) % Finds all the vertices!
 %% Find the terminal set by fitting the largest box inside the constraints
 
 % Define beginning size of c and the step size
 c = 0.0245;
-step = 0.0001;
+step = 0.01;
 
 % Loop, every time we increase the size of c until we violate our
 % constraints.

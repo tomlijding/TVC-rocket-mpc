@@ -9,7 +9,7 @@ addpath given
 samplingTime = 0.1;
 
 LTId = makeDLinSysNAero(samplingTime);
-var.x0 =[0 3 0 0 0 0.05 0]'; % Slight pitch angle
+var.x0 =[0 0 0 0 0 0 0 0.1 0]'; % Slight pitch angle
 
 %% Check Controllability
 rank(ctrb(LTId.A,LTId.B)) % Is equal to 7, thus full rank
@@ -26,13 +26,13 @@ dim.nu = size(LTId.B,2);
 dim.N = 3;
 
 % Define bounds
-xlb = [-inf;-inf;-inf;-inf;-inf; -0.261799;-0.261799];
-xub = [inf;inf;inf;inf;inf;0.261799;0.261799];
-ulb = [-0.15708;-0.15708;0];
-uub = [0.15708;0.15708;140.93];
+xlb = [-inf();-inf();-inf();-inf();-inf(); -inf(); -inf(); -0.261799;-0.261799];
+xub = [inf();inf();inf();inf();inf();inf();inf();0.261799;0.261799];
+ulb = [-0.15708;-0.15708;-1.66;-m*g];
+uub = [0.15708;0.15708;1.66;1052.279-m*g];
 
-q = 1;
-r = 1;
+q = 10;
+r = 0.1;
 
 weights.Q = q*eye(dim.nx);
 weights.R = r*eye(dim.nu);
@@ -53,7 +53,7 @@ predmod = predmodgen(LTId,dim);
 %% Define the cost function
 
 % Weighting matrices
-Qbar = blkdiag(kron(weights.Q,eye(dim.N)),weights.P);
+Qbar = blkdiag(kron(weights.Q,eye(dim.N)),1*weights.P);
 Rbar = kron(weights.R,eye(dim.N));
 
 % We define our cost function via a quadratic cost defined by
@@ -106,6 +106,18 @@ end
 
 timeVec = 0:samplingTime:var.T*samplingTime;
 figure
+subplot(2,1,1);
 stairs(timeVec,x(:,:)')
-title("Output of MPC")
-legend("u","v", "w","q","r", "$\theta$", "$\psi$", "Interpreter"," Latex")
+yline(0.261799)
+yline(-0.261799)
+title("State Evolution")
+legend("u","v", "w","p","q","r", "$\phi$","$\theta$", "$\psi$","$\theta_{lim}$","$\psi_{lim}$", "Interpreter"," Latex")
+xlim([0,4])
+
+subplot(2,1,2)
+stairs(timeVec(1:end-1),u_rec(:,:)')
+title("Input Evolution")
+yline(0.15708)
+yline(-0.15708)
+xlim([0,4])
+legend("$\mu_1$","$\mu_2$", "$\tau_r$","$T$","$\mu_{ub}$","$\mu_{lb}$", "Interpreter"," Latex")
