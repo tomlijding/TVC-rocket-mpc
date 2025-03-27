@@ -14,7 +14,7 @@ var.x0 =[4 0 0 0 0 0 0 0.05 0]'; % Slight pitch angle
 
 %% Check Controllability
 
-rank(ctrb(LTId.A,LTId.B)); % Is equal to 7, thus full rank
+rank(ctrb(LTId.A,LTId.B)) % Is equal to 9, thus full rank
 
 %% Define our bounds and find the LQR optimal control gain
 
@@ -73,7 +73,7 @@ ulb_full = repmat(ulb,[dim.N 1]);
 %% Do the optimization problem
 
 
-%% Run the MPC!
+%% MPC for Beta terminal set approach
 
 var.T = 100; % Time
 
