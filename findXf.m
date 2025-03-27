@@ -50,8 +50,8 @@ V_x = findVerticesOfEllipse(P,1) % Finds all the vertices!
 %% Find the terminal set by fitting the largest box inside the constraints
 
 % Define beginning size of c and the step size
-c = 0.0245;
-step = 0.01;
+c = 0.1973;
+step = 0.00001;
 
 % Loop, every time we increase the size of c until we violate our
 % constraints.
@@ -80,4 +80,4 @@ for t = 1:1000
 end
 %% Find Xn via built in function
 terminal = 'lqr';
-[Xn, V, Z] = findXn(A, B, K, N, xlb, xub, ulb, uub, terminal);
+[Xn, V, Z] = findXn(A, B, K, dim.N, xlb, xub, ulb, uub, terminal);

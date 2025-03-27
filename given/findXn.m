@@ -34,31 +34,30 @@ case 'lqr'
     % Use LQR-invariant set.
     Xf = struct();
     ApBK = A + B*K; % LQR evolution matrix.
-    input("Debugging: Begin finding terminal set?")
     [Xf.A, Xf.b] = calcOinf(ApBK, Acon, bcon);
-    print("Debugging, terminal set succesfully found")
+    disp("Debugging, terminal set succesfully found")
     [~, Xf.A, Xf.b] = removeredundantcon(Xf.A, Xf.b);
 end
 
 % Now do feasible sets computation.
-figure();
-hold('on');
-colors = jet(N + 1);
+% figure();
+% hold('on');
+% colors = jet(N + 1);
 
 Xn = cell(N + 1, 1);
 Xn{1} = Xf;
-names = cell(N + 1, 1);
-names{1} = 'Xf';
+% names = cell(N + 1, 1);
+% names{1} = 'Xf';
 V = cell(N + 1, 1);
 for n = 1:(N + 1)
-    % Plot current set.
-    if n > 1
-        names{n} = sprintf('X%d', n - 1);
-    end
-    
-    plotargs = {'-o', 'color', colors(n,:)};
-    
-    V{n} = plotpoly(Xn{n}, plotargs{:});
+    % % Plot current set.
+    % if n > 1
+    %     names{n} = sprintf('X%d', n - 1);
+    % end
+    % 
+    % plotargs = {'-o', 'color', colors(n,:)};
+    % 
+    % V{n} = plotpoly(Xn{n}, plotargs{:});
     
     if n == (N + 1)
         break
@@ -70,6 +69,6 @@ for n = 1:(N + 1)
     Xn{n + 1} = nextXn;
 end
 
-legend(names{:});
+% legend(names{:});
 
 end%function

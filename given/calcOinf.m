@@ -38,7 +38,7 @@ for t = 0:1000
     % If everything was feasible, then we're done.
     if okay
         tstar = t;
-        print("Terminal set successfully found")
+        disp("Terminal set successfully found")
         break
     end
     fprintf("Time is: %g\n",t);
