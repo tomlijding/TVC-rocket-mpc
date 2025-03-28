@@ -1,16 +1,15 @@
 clear all
 close all
 
-x0 = [-20;0;0;
-    0.0;0.0;0.0;
+x0 = [-6;0;0;
     0;0;0;
-    100;10;20];
+    0;0.3;0;
+    40;10;10];
 u0 = [0;0;0;0];
-d = 0;
 %% Optimizing the trajectory
 
-T_proc = 10; % the time in seconds in which the landing procedure is excecuted
-Ts = 0.2; % trajectory sampling time
+T_proc = 30; % the time in seconds in which the landing procedure is excecuted
+Ts = 0.5; % trajectory sampling time
 M = T_proc / Ts
 
 planner = nlmpcMultistage(M,12,4);
@@ -18,7 +17,7 @@ planner.Ts = Ts;
 
 
 planner.Model.StateFcn = 'NLSysDyn_CT';
-planner.Model.StateJacFcn = 'NLSysDyn_CTJacobian';
+%planner.Model.StateJacFcn = 'NLSysDyn_CTJacobian';
 
 planner.MV(1).Min = -0.15708;
 planner.MV(1).Max = 0.15708;
@@ -27,21 +26,21 @@ planner.MV(2).Max = 0.15708; % TODO
 planner.MV(3).Min = 0;
 planner.MV(3).Max = 900; % TODO; wat moet dit zijn?
 
-% planner.States(1).Max = 20;
-% planner.States(2).Max = 100;
-% planner.States(3).Max = 100;
+% planner.States(1).Max = 0;
+% planner.States(2).Max = 0;
+% planner.States(3).Max = 0;
 planner.States(4).Min = -0.1;
 planner.States(4).Max = 0.1;
 planner.States(5).Min = -0.1;
 planner.States(5).Max = 0.1;
 planner.States(6).Min = -0.1;
 planner.States(6).Max = 0.1;
-planner.States(7).Min = -0.3;
-planner.States(7).Max = 0.3;
-planner.States(8).Min = -0.3;
-planner.States(8).Max = 0.3;
-planner.States(9).Min = -0.3;
-planner.States(9).Max = 0.3;
+planner.States(7).Min = -0.1;
+planner.States(7).Max = 0.1;
+planner.States(8).Min = -0.5;
+planner.States(8).Max = 0.5;
+planner.States(9).Min = -0.5;
+planner.States(9).Max = 0.5;
 planner.States(10).Min = 0;
 % planner.States(10).Max = x0(10)+1;
 % planner.States(11).Min = -50;
@@ -69,10 +68,16 @@ fprintf('Optimal trajectory planner running...\n');
 tic;
 [~,~,info] = nlmpcmove(planner,x0,u0);
 t=toc;
+
+if info.ExitFlag == -2
+    error('No Feasible trajectory')
+end
+
 fprintf('Calculation Time = %s\n',num2str(t));
 fprintf('Objective cost = %s',num2str(info.Cost));
-fprintf('ExitFlag = %s',num2str(info.Iterations));
+fprintf('ExitFlag = %s',num2str(info.ExitFlag));
 fprintf('Iterations = %s\n',num2str(info.Iterations));
+
 %% Plotting results
 
 X = cat(1,x0.',info.Xopt);
@@ -87,7 +92,7 @@ xlabel('y')
 ylabel('z')
 zlabel('x')
 axis equal
-%zlim([0 20])
+% %zlim([0 20])
 
 %% Further investigation of results...
 
@@ -132,3 +137,8 @@ plot(U(:,4))
 xlabel('M')
 ylabel('Gyroscope action')
 legend('tau')
+
+%% Rocket Animation for insights
+
+animateRocket(X,U, true)
+
