@@ -1,23 +1,23 @@
 clear all
 close all
 
-x0 = [-6;0;0;
+x0 = [-5;0;0;
     0;0;0;
     0;0.3;0;
     40;10;10];
 u0 = [0;0;0;0];
 %% Optimizing the trajectory
 
-T_proc = 30; % the time in seconds in which the landing procedure is excecuted
+T_proc = 20; % the time in seconds in which the landing procedure is excecuted
 Ts = 0.5; % trajectory sampling time
 M = T_proc / Ts
 
 planner = nlmpcMultistage(M,12,4);
-planner.Ts = Ts;
+planner.Ts = Ts; % Trapezoidal is standard for discretization
 
 
 planner.Model.StateFcn = 'NLSysDyn_CT';
-%planner.Model.StateJacFcn = 'NLSysDyn_CTJacobian';
+planner.Model.StateJacFcn = 'NLSysDyn_CTJacobian';
 
 planner.MV(1).Min = -0.15708;
 planner.MV(1).Max = 0.15708;
@@ -141,4 +141,3 @@ legend('tau')
 %% Rocket Animation for insights
 
 animateRocket(X,U, true)
-
