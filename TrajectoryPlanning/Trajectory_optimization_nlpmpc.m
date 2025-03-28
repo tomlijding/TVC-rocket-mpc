@@ -141,3 +141,4 @@ legend('tau')
 %% Rocket Animation for insights
 
 animateRocket(X,U, true)
+

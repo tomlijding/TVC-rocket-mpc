@@ -9,12 +9,11 @@ addpath given
 samplingTime = 0.1;
 
 LTId = makeDLinSysNAero(samplingTime);
-origin = [0 0 0 0 0 0 0 0 0]'; % Define origin
-var.x0 =[4 0 0 0 0 0 0 0.05 0]'; % Slight pitch angle
+var.x0 =[0 0 0 0 0 0 0.05 0 0]'; % Slight pitch angle
 
 %% Check Controllability
 
-rank(ctrb(LTId.A,LTId.B)) % Is equal to 9, thus full rank
+rank(ctrb(LTId.A,LTId.B)); % Is equal to 7, thus full rank
 
 %% Define our bounds and find the LQR optimal control gain
 
@@ -25,7 +24,7 @@ g = 9.81; % Gravitation constant
 % Define dimensions
 dim.nx = size(LTId.A,2);
 dim.nu = size(LTId.B,2);
-dim.N = 5;
+dim.N = 3;
 
 % Define bounds
 xlb = [-inf();-inf();-inf();-inf();-inf(); -inf(); -inf(); -0.261799;-0.261799];
@@ -73,7 +72,7 @@ ulb_full = repmat(ulb,[dim.N 1]);
 %% Do the optimization problem
 
 
-%% MPC for Beta terminal set approach
+%% Run the MPC!
 
 var.T = 100; % Time
 
@@ -124,11 +123,11 @@ for k=1:var.T
         predmod.S*u_con <= xub_full - predmod.T*x_0, ...
         ulb_full <= u_con, ...
         u_con <= uub_full, ...
-        x_0'*W_h*u_con + u_con'*W_H*u_con <= c - x_0'*T_N'*weights.P*T_N*x_0 %
+        x_0'*W_h*u_con + u_con'*W_H*u_con <= c - x_0'*T_N'*weights.P*T_N*x_0
         ];                                           %define constraints
     Objective = 0.5*u_con'*H*u_con+(x_0'*h)*u_con;     %define cost function
 
-    options = sdpsettings('debug',1, 'solver','gurobi','verbose',0);
+    options = sdpsettings('debug',1, 'solver','fmincon');
     
     disp(optimize(Constraint,Objective,options));                          %solve the problem
     u_con=value(u_con);                                 %assign the solution
@@ -140,7 +139,7 @@ for k=1:var.T
     clear u_con
 end
 
-%% Plotting 
+%% Plotting
 
 timeVec = 0:samplingTime:var.T*samplingTime;
 figure
@@ -150,12 +149,12 @@ yline(0.261799)
 yline(-0.261799)
 title("State Evolution")
 legend("u","v", "w","p","q","r", "$\phi$","$\theta$", "$\psi$","$\theta_{lim}$","$\psi_{lim}$", "Interpreter"," Latex")
-% xlim([0,4])
+xlim([0,4])
 
 subplot(2,1,2)
 stairs(timeVec(1:end-1),u_rec(:,:)')
 title("Input Evolution")
 yline(0.15708)
 yline(-0.15708)
-% xlim([0,4])
+xlim([0,4])
 legend("$\mu_1$","$\mu_2$", "$\tau_r$","$T$","$\mu_{ub}$","$\mu_{lb}$", "Interpreter"," Latex")

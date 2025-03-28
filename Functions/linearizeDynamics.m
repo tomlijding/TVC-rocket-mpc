@@ -16,4 +16,5 @@ LTI.A = double(subs(symbolic.A,symbolicVector',operatingPoints'));
 LTI.B = double(subs(symbolic.B,symbolicVector',operatingPoints'));
 LTI.C = eye(size(LTI.A,1));
 LTI.Bd = double(subs(symbolic.Bd,symbolicVector',operatingPoints'));
+
 end

@@ -1,6 +1,7 @@
-function [LTId] = makeDLinSysNAero(samplingTime)
+function [LTId] = makeDLinSysNAero_Dist(samplingTime)
 %MAKEDLINSYSNAERO Creates the linear dynamics for the rocket system given
-%that it is floating
+%that it is floating, include a disturbance which acts on the angular
+%velocity around the x-axis
 
 % Function defines important variables, inspect the function
 % defineConstants for the definition of all variables
@@ -30,7 +31,8 @@ disturbanceOperatingPoints = [];
 % with A,B,G matrices as subobjects
 [LTI, ~] = linearizeDynamics(symbolicDynamics,symbolicStates,symbolicInputs,symbolicDisturbances,stateOperatingPoints,inputOperatingPoints,disturbanceOperatingPoints);
 
-LTI = ss(LTI.A,LTI.B,LTI.C,0);
+Bd = [0 0 0 J_t^-1 0 0 0 0 0]';
+LTI = ss(LTI.A,[LTI.B Bd],LTI.C,0);
 
 LTId = c2d(LTI,samplingTime,'zoh');
 end
