@@ -40,7 +40,7 @@ function symbolicDynamics = initSymbolicSysDynamics(g, m, J_t, l)
     wdot = -g*(cphi*stheta*cPsi+sphi*sPsi) - T/m*smu1  - p * v + q*u;
 
     pdot = J_t^-1*tau_r;
-    qdot = J_t^-1*(- T*smu1*l);
+    qdot = J_t^-1*(-T*smu1*l);
     rdot = J_t^-1*(T*cmu1*smu2*l);
     
     phidot = p + (q*sphi +r*cphi)*ttheta;
