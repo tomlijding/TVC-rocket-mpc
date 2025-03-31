@@ -1,4 +1,3 @@
-
 function cost = PlannedTrajectoryCost(i,states, inputs)
 % states is nx x 1 and contains the state at a specific time
 % inputs is nu x 1 and contains the inputs at a specific time

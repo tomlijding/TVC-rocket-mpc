@@ -46,7 +46,7 @@ xub = [inf();inf(); inf();inf(); inf();inf();inf(); 0.261799; 0.261799];
 ulb = [-0.15708; -0.15708;-1.66; 0-m*g];
 uub = [0.15708; 0.15708; 1.66; 1052.279-m*g];
 
-V_x = findVerticesOfEllipse(P,1) % Finds all the vertices!
+V_x = findVerticesOfEllipse(P,1); % Finds all the vertices!
 %% Find the terminal set by fitting the largest box inside the constraints
 
 % Define beginning size of c and the step size
@@ -79,5 +79,21 @@ for t = 1:1000
     end
 end
 %% Find Xn via built in function
-terminal = 'lqr';
-[Xn, V, Z] = findXn(A, B, K, dim.N, xlb, xub, ulb, uub, terminal);
+
+
+% Build feasible region considering x \in X and Kx \in U.
+    % Control input
+[A_U, b_U] = hyperrectangle(ulb, uub);
+A_lqr = A_U*K;
+b_lqr = b_U;
+    
+% State input
+[A_X, b_X] = hyperrectangle(xlb, xub);
+Acon = [A_lqr; A_X];
+bcon = [b_lqr; b_X];
+% Use LQR-invariant set.
+Xf = struct();
+ApBK = A + B*K; % LQR evolution matrix.
+[Xf.A, Xf.b] = calcOinf(ApBK, Acon, bcon);
+disp("Debugging, terminal set succesfully found")
+[~, Xf.A, Xf.b] = removeredundantcon(Xf.A, Xf.b);

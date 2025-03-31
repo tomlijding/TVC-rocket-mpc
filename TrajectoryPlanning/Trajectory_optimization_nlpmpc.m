@@ -15,7 +15,6 @@ M = T_proc / Ts
 planner = nlmpcMultistage(M,12,4);
 planner.Ts = Ts;
 
-
 planner.Model.StateFcn = 'NLSysDyn_CT';
 %planner.Model.StateJacFcn = 'NLSysDyn_CTJacobian';
 
