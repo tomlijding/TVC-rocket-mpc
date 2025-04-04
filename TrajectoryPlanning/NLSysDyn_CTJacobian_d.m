@@ -1,8 +1,8 @@
-function [A, B] = NLSysDyn_CTJacobian(state, input)
-% x is the current
-% u is the given input
-% d is the given wind disturbance
-% x_next is the next state
+function [A, B, Bd] = NLSysDyn_CTJacobian_d(state, input)
+% state is the current state
+% input is the given input
+% A, B, Bd are calculated by linearization around state,input
+% In this version only the known, constant gravitational disturbance is added
 
 u = state(1);
 v = state(2);
@@ -56,3 +56,16 @@ B=[-T*sin(mu1)*cos(mu2)/m,-T*sin(mu2)*cos(mu1)/m,cos(mu1)*cos(mu2)/m,0;
    0,0,0,0;
    0,0,0,0;
    0,0,0,0];
+
+Bd = [-cos(theta)*cos(psi);
+    -(sin(phi)*sin(theta)*cos(psi)-cos(phi)*sin(psi));
+    -(cos(phi)*sin(theta)*cos(psi)+sin(phi)*sin(psi));
+    0;
+    0;
+    0;
+    0;
+    0;
+    0;
+    0;
+    0;
+    0];
