@@ -110,7 +110,7 @@ for k=1:M-1
 
     % Linearize the system
     
-    [LTI.A, LTI.B, Bd] = NLSysDyn_CTJacobian_d(x0, u0); % disturbance not input as g is constant
+    [LTI.A, LTI.B, Bd] = NLSysDyn_CTJacobian_d(xt_e(k+1,:).', ut(k+1,:).'); % disturbance not input as g is constant
 
     % Defining C and D
     C = eye(dim.nx);
@@ -190,14 +190,18 @@ for k=1:M-1
     weight.Q = Q_e;
     weight.P = P_e * beta;
 
+    % % trying to precondition H using Ak
+    % Ak = LTI.A + LTI.B * Ke;
+    % LTI.A = Ak; % u NOW BECOMES v
+
     % Setting up prediction matrices
     predmod = predmodgen(LTI,dim);
     S = predmod.S;
     T = predmod.T;
     %[H,h] = costgen(predmod,weight,dim);
 
-    Qbar = blkdiag(kron(weight.Q,eye(dim.N)),1*weight.P);
-    Rbar = kron(weight.R,eye(dim.N));
+    Qbar = blkdiag(kron(eye(dim.N),weight.Q),1*weight.P);
+    Rbar = kron(eye(dim.N),weight.R);
 
     h = T.'*Qbar*S;
     H = S.'*Qbar*S+Rbar; 
@@ -205,10 +209,10 @@ for k=1:M-1
     eig_test = eig(H);
 
     %H = H + eye(size(H))*1e30; % BOOTleg versie, herzien! HOE HIER MEE OMGAAN?
-    
-    % trying to precondition H using Ak
-    Ak = LTI.A + LTI.B * Ke;
-    LTI.A = Ak; % u NOW BECOMES v
+
+
+
+
 
     %Check if H is positive semi definite
     mineigr = min(eig(weight.R));
@@ -244,10 +248,11 @@ for k=1:M-1
         Objective = 0.5*uostar'*H*uostar+(x_err.'*h)*uostar;    %define cost function
         options = sdpsettings('solver','quadprog','verbose',0);
         optimize(Constraint,Objective, options);                                    %solve the problem
-        uostar=value(uostar);      
-    
+        uostar=value(uostar)      
+        K*x_err(1:end-1,1)
+
         % Select the first input only, Kx action already implemented
-        u_rec(:,i)=K*x_err(1:end-1,1) + uostar(1:dim.nu)+u_r;
+        u_rec(:,i) = K*x_err(1:end-1,1) + uostar(1:dim.nu) + u_r;
     
         % Compute the state/output evolution
         % x(:,i+1)=LTI.A*x_0 + LTI.B*u_rec(:,i);
@@ -379,3 +384,5 @@ plot(U(:,4))
 xlabel('M')
 ylabel('Gyroscope action')
 legend('tau')
+%% 
+
