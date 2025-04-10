@@ -80,7 +80,7 @@ faces = [2, 3, 4, 5;
 base_center_body = mean(rocket_shape(:,2:5), 2);
 
 % Set up the figure.
-figure;
+%figure;
 grid on;
 axis equal;
 view(3);         % Force a 3D view.
