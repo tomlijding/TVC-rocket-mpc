@@ -32,3 +32,10 @@ Finally, we implement a trajectory tracking MPC to "land" the rocket. We augment
 The result is shown below.
 
 ![rocketlaunch](https://github.com/user-attachments/assets/66b14073-fd94-4857-b341-9a2e278c8eff)
+
+## Code structure
+The code is structured as follows.
+- given: Folder containing common functions for finding the terminal set of a given MPC and defining the prediction dynamics
+- Functions: Useful functions for the MPC. Examples include defining the constants, initializing the dynamics, functions to run MPC simulations (linear, nonlinear, output tracking, regulation)
+- Scripts: Scripts for comparing different initial conditions, weighting matrices, discretization times, prediction horizons, disturbances etc.
+- TrajectoryPlanning: Folder containing all necessary code for the TrajectoryPlanning MPC
