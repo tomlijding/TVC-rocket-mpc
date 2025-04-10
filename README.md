@@ -13,10 +13,14 @@ This project was completed for the course Model Predictive Control at Delft Univ
 We build upon the given model by introducing control of the roll of the aircraft via flywheel action. Additionally, we introduce disturbances on the rocket. The MPC is built upon three sections.
 
 ## Regulation
-In the first stage, the rocket is regulated to a "floating" state, wherein all velocities, angular velocities and Euler angles are zero. This is done for a range of weighting matrices $Q$ and $R$, sampling times, and prediction horizons $N$.
+In the first stage, the rocket is regulated to a "floating" state, wherein all velocities, angular velocities and Euler angles are zero. This is done for a range of weighting matrices $Q$ and $R$, sampling times, and prediction horizons $N$. A comparison to an LQR controller which does not saturate is given below.
+[MPCLQRComparison.pdf](https://github.com/user-attachments/files/19686463/MPCLQRComparison.pdf)
 
 ## Output tracking and disturbance rejection
-In the second stage, we assume that 6 out of the 9 states are observable and implement a Leuenberger observer. Additionally, we augment the dynamics to include an additional disturbance on the roll angular velocity which we assume to be constant. The system is then simulated.
+In the second stage, we assume that 6 out of the 9 states are observable and implement a Leuenberger observer. Additionally, we augment the dynamics to include an additional disturbance on the roll angular velocity which we assume to be constant. The system is then simulated. The response to a changing reference and disturbance is shown below.
+
+[dist_track.pdf](https://github.com/user-attachments/files/19686465/dist_track.pdf)
+
 
 Additionally, an optimal target selection (OTS) optimization problem is executed at each time step, to solve for an optimal state and input configuration to track a reference.
 
