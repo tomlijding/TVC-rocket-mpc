@@ -1,13 +1,13 @@
 # Thrust Vector Controlled Sounding Rocket MPC
 
 ## Author Details
-Institution: Delft University of Technology
-Department: Mechanical Engineering
-Authored by:
-Tom Lijding
-Wesley Nijhuis
+Institution: Delft University of Technology \
+Department: Mechanical Engineering \
+Authored by: \
+Tom Lijding \
+Wesley Nijhuis \
 
-This project was completed for the course Model Predictive Control at Delft University of Technology. In it we explore the model predictive control of a sounding rocket, the dynamics of which are described in
+This project was completed for the course Model Predictive Control at Delft University of Technology. In it we explore the model predictive control of a sounding rocket, the dynamics of which are described in \
 [Thrust vector control and state estimation architecture for low-cost small-scale launchers](https://arxiv.org/abs/2303.16983).
 
 We build upon the given model by introducing control of the roll of the aircraft via flywheel action. Additionally, we introduce disturbances on the rocket. The MPC is built upon three sections.
