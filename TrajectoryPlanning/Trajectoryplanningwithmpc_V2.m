@@ -349,11 +349,11 @@ hold off
 %% Making Custom Trajectory
 
 % Setting up a circular trajectory where the rocket is upright
-dim.M = 20;
-arc = 0.45;
+dim.M = 150;
+arc = 0.485;
 thetas = 0:(arc*2*pi/dim.M):arc*2*pi;
 
-[yt_c, xt_c, ut_c] = circularpath(8,thetas,3, 0);
+[yt_c, xt_c, ut_c] = circularpath(5,thetas,3, 0);
 
 
 % either run target optimization or prioritize XYZ
