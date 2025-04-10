@@ -14,7 +14,8 @@ We build upon the given model by introducing control of the roll of the aircraft
 
 ## Regulation
 In the first stage, the rocket is regulated to a "floating" state, wherein all velocities, angular velocities and Euler angles are zero. This is done for a range of weighting matrices $Q$ and $R$, sampling times, and prediction horizons $N$. A comparison to an LQR controller which does not saturate is given below.
-![MPCLQRComparison](https://github.com/user-attachments/assets/ce9d9b7b-5c88-4288-8292-12e0ec6d9691)
+
+![MPCLQRComparison_page-0001](https://github.com/user-attachments/assets/d8351f4e-7d8f-46b1-8c1e-69cbeea8662a)
 
 
 ## Output tracking and disturbance rejection
