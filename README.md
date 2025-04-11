@@ -27,7 +27,7 @@ In the second stage, we assume that 6 out of the 9 states are observable and imp
 Additionally, an optimal target selection (OTS) optimization problem is executed at each time step, to solve for an optimal state and input configuration to track a reference.
 
 ## Trajectory tracking
-Finally, we implement a trajectory tracking MPC to "land" the rocket. We augment the dynamics to include the positions of the system (contrary to just the velocities) and solve an offline trajectory optimization problem and an online reference tracking problem iteratively.
+Finally, we implement a trajectory tracking MPC to launch and land the rocket. We augment the dynamics to include the positions of the system (contrary to just the velocities) and solve an offline trajectory optimization problem and an online reference tracking problem iteratively.
 
 The result is shown below.
 
