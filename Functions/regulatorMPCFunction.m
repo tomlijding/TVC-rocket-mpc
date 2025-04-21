@@ -46,8 +46,8 @@ predmod = predmodgen(LTId,dim);
 % Define the cost function
 
 % Weighting matrices
-Qbar = blkdiag(kron(weights.Q,eye(dim.N)),1*weights.P);
-Rbar = kron(weights.R,eye(dim.N));
+Qbar = blkdiag(kron(eye(dim.N),weights.Q),1*weights.P);
+Rbar = kron(eye(dim.N),weights.R);
 
 % We define our cost function via a quadratic cost defined by
 % 0.5*u_N'*H*u_N + h*u_N. Notice how x_0 is not part of the equation (it is
